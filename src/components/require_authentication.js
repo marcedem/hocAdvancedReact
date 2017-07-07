@@ -1,4 +1,6 @@
-import React, { COmponent } from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+ 
 
 // Implementation of Higher Order Compoment
 export default function(ComposedComponent){
@@ -7,11 +9,17 @@ export default function(ComposedComponent){
     class Authentication extends Component{
         render(){
             console.log(this.props.resources); //  => resourceList
-            return <ComposedComponent { ...this.props } />
+            console.log('User authenticated: ', this.props.authenticated); //  => resourceList
+            // console.log('Rendering', ComposedComponent); 
+            return <ComposedComponent { ...this.props } /> ;
         }    
     }
 
-    return Authentication
+    function mapStateToProps(state){
+        return { authenticated: state.authenticated };
+    }
+
+    return connect(mapStateToProps)(Authentication);
 }
 
 
