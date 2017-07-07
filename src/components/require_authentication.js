@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
  
 
 // Implementation of Higher Order Compoment
@@ -7,10 +8,30 @@ export default function(ComposedComponent){
 
     // Normal react component sart here
     class Authentication extends Component{
+
+        // contextTypes is needed in order to avoid abusing of context use in the app
+        static contextTypes = {
+            router: React.PropTypes.object
+        }
+
+        // executed when this component is about to render
+        componentWillMount(){
+            if(!this.props.authenticated){
+                this.context.router.history.push('/');
+            }
+        }
+
+        // excuted with component is about to be handed a new set of props (state changes)
+        componentWillUpdate(nextProps){
+            if(!nextProps.authenticated){
+                this.context.router.history.push('/');
+            }
+        }
+
         render(){
             console.log(this.props.resources); //  => resourceList
             console.log('User authenticated: ', this.props.authenticated); //  => resourceList
-            // console.log('Rendering', ComposedComponent); 
+            console.log('Context', this.context); 
             return <ComposedComponent { ...this.props } /> ;
         }    
     }
